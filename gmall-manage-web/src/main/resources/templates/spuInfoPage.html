@@ -73,9 +73,29 @@
         var spuInfo = {};
         spuInfo["spuName"] = $("#spuName").textbox("getValue");
         spuInfo["description"] = $("#description").textbox("getValue");
+
+        saleAttrRows = $("#spuSaleAttrDg").datagrid("getRows");
+        $(saleAttrRows).each(function(i,saleAttrRow){
+            spuInfo["spuSaleAttrList[" + i + "].saleAttrId"] = saleAttrRow.saleAttrId;
+            spuInfo["spuSaleAttrList[" + i + "].saleAttrName"] = saleAttrRow.saleAttrName;
+
+            //封装属性值集合
+            spuSaleAttrValueJson = saleAttrRow.spuSaleAttrValueJson.rows;
+            $(spuSaleAttrValueJson).each(function(j,saleAttrValue){
+                spuInfo["spuSaleAttrList[" + i + "].spuSaleAttrValueList[" + j + "].saleAttrId"] = saleAttrRow.saleAttrId;
+                spuInfo["spuSaleAttrList[" + i + "].spuSaleAttrValueList[" + j + "].saleAttrValueName"] = saleAttrValue.saleAttrValueName;
+            });
+            console.log(spuInfo);
+        });
         $.post("saveSpu",spuInfo,function(data){
             alert(data);
         });
+
+        // $("#spu_dlg").datagrid("close");
+    }
+
+    function closeSpu(){
+        // $("#spu_dlg").datagrid("close");
     }
 
     function addSpuSaleAttr(){

@@ -108,7 +108,7 @@
                 columns: [[
                     {field: 'saleAttrId', title: '销售属性id', width: '20%'},
                     {
-                        field: 'SaleAttrValueName', title: '销售属性值名称', width: '80%',
+                        field: 'saleAttrValueName', title: '销售属性值名称', width: '80%',
                         editor: {
                             type: 'validatebox', options: {required: true}  //必填项
                         }
@@ -117,7 +117,7 @@
                 toolbar: [{
                     text: '添加', iconCls: 'icon-add',
                     handler: function () {
-                        datagrid.datagrid('appendRow', {saleAttrId: '0', SaleAttrValueName: '新名称'});
+                        datagrid.datagrid('appendRow', {saleAttrId: '0', saleAttrValueName: '新名称'});
                     }
                 }, '-',
                     {
@@ -134,7 +134,7 @@
                     //双击开启编辑行
                     datagrid.datagrid("beginEdit", rowIndex);
                     //设定当失去焦点时,退出编辑状态
-                    var valueName = rowData.SaleAttrValueName;
+                    var valueName = rowData.saleAttrValueName;
                     $("input.datagrid-editable-input").val(valueName).bind("blur", function (evt) {
                         datagrid.datagrid('endEdit', rowIndex);
                     });
@@ -142,6 +142,8 @@
             });
 
         }
+
+
      </script>
 </div>
 </body>

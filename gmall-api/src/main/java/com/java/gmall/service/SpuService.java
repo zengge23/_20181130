@@ -9,4 +9,6 @@ public interface SpuService {
     List<SpuInfo> getSpuList(Integer catalog3Id);
 
     List<BaseSaleAttr> baseSaleAttrList();
+
+    void saveSpu(SpuInfo spuInfo);
 }

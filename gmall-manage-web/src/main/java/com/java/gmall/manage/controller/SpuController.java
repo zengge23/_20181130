@@ -35,4 +35,10 @@ public class SpuController {
         return spuInfos;
     }
 
+    @RequestMapping("saveSpu")
+    public String saveSpu(SpuInfo spuInfo){
+//        spuService.saveSpu(spuInfo);
+        return "success";
+    }
+
 }

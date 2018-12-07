@@ -31,4 +31,9 @@ public class SpuServiceImpl implements SpuService {
     public List<BaseSaleAttr> baseSaleAttrList() {
         return baseSaleAttrMapper.selectAll();
     }
+
+    @Override
+    public void saveSpu(SpuInfo spuInfo) {
+
+    }
 }
