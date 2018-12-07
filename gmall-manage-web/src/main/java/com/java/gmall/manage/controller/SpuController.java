@@ -1,6 +1,7 @@
 package com.java.gmall.manage.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.java.gmall.bean.BaseSaleAttr;
 import com.java.gmall.bean.SpuInfo;
 import com.java.gmall.service.SpuService;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,13 @@ public class SpuController {
 
     @Reference
     SpuService spuService;
+
+    @ResponseBody
+    @RequestMapping("baseSaleAttrList")
+    public List<BaseSaleAttr> baseSaleAttrList(){
+        List<BaseSaleAttr> baseSaleAttrs = spuService.baseSaleAttrList();
+        return baseSaleAttrs;
+    }
 
     @RequestMapping("spuListPage")
     public String spuListPage(){

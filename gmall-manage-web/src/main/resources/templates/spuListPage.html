@@ -24,8 +24,7 @@
             <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editSpuInfo()">编辑</a>
             <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a>
             <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="addSkuInfo()">增加sku</a>
-            <a href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="showSkuInfoList()">
-                sku列表</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="showSkuInfoList()">sku列表</a>
         </div>
         <div>
             一级分类：
@@ -59,11 +58,15 @@
     }
 
     function addSpuInfo(){
+        //获取三级分类id
         var catalog3Id = $("#ctg3ForSpuList").combobox('getValue');
         if (!catalog3Id) {
             catalog3Id = '61';
         }
         $("#spu_dlg").dialog("open");
+
+        //初始化spu添加页面
+        initSpuInfoDlg();
     }
 
     function editSpuInfo(){
