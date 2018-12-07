@@ -69,11 +69,16 @@
 <script>
 
     function saveSpu(){
+        //获取三级分类id
+        var catalog3Id = $("#ctg3ForSpuList").combobox('getValue');
+        if (!catalog3Id) {
+            catalog3Id = '61';
+        }
         //获得spu的参数
         var spuInfo = {};
         spuInfo["spuName"] = $("#spuName").textbox("getValue");
         spuInfo["description"] = $("#description").textbox("getValue");
-
+        spuInfo["catalog3Id"] = catalog3Id;
         saleAttrRows = $("#spuSaleAttrDg").datagrid("getRows");
         $(saleAttrRows).each(function(i,saleAttrRow){
             spuInfo["spuSaleAttrList[" + i + "].saleAttrId"] = saleAttrRow.saleAttrId;

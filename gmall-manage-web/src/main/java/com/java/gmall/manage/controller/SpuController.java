@@ -37,7 +37,9 @@ public class SpuController {
 
     @RequestMapping("saveSpu")
     public String saveSpu(SpuInfo spuInfo){
-//        spuService.saveSpu(spuInfo);
+        spuService.saveSpu(spuInfo);
+
+        //保存spu
         return "success";
     }
 
