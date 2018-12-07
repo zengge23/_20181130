@@ -40,6 +40,25 @@
     </div>
 
     <script language="JavaScript">
+
+        function saveSpuSaleAttr(){
+            //保存销售属性信息
+            //获取销售属性名, 销售属性id,销售属性值暂存(集合)
+            var saleAttrId = $("#saleAttrSelect").combobox("getValue");
+            var saleAttrName = $("#saleAttrSelect").combobox("getText");
+            var spuSaleAttrValueJson = $("#spuSaleAttrValueDg").datagrid("getData");
+            console.log(spuSaleAttrValueJson);
+            $("#spuSaleAttrDg").datagrid("appendRow",{
+                saleAttrId:saleAttrId,
+                saleAttrName:saleAttrName,
+                spuSaleAttrValueJson:spuSaleAttrValueJson
+            });
+            $("#spuSaleAttr_dlg").dialog("close");
+        }
+        function closeSpuSaleAttr(){
+            $("#spuSaleAttr_dlg").dialog("close");
+        }
+
         function initSpuSaleAttrDlg() {
 //             $("#spuSaleAttrValueDg").datagrid({
 //                 columns: [[
@@ -123,6 +142,6 @@
             });
 
         }
-    </script>
+     </script>
 </div>
 </body>

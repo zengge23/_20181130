@@ -68,6 +68,16 @@
 
 <script>
 
+    function saveSpu(){
+        //获得spu的参数
+        var spuInfo = {};
+        spuInfo["spuName"] = $("#spuName").textbox("getValue");
+        spuInfo["description"] = $("#description").textbox("getValue");
+        $.post("saveSpu",spuInfo,function(data){
+            alert(data);
+        });
+    }
+
     function addSpuSaleAttr(){
         $("#spuSaleAttr_dlg").dialog("open");
         initSpuSaleAttrDlg();
@@ -88,7 +98,7 @@
     function initSpuImgListDatagrid(){
         $("#spuSaleAttrDg").datagrid({
             columns: [[
-                {field: 'saleAttrId', title: '销售属性id', width: 100},
+                {field: 'saleAttrId', title: '销售属性编号', width: 100},
                 {
                     field: 'saleAttrName', title: '销售属性名称', width: 100,
                     editor: {type: "validatebox", options: {required: true}}
