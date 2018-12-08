@@ -35,6 +35,7 @@ public class SpuController {
         return spuInfos;
     }
 
+    @ResponseBody
     @RequestMapping("saveSpu")
     public String saveSpu(SpuInfo spuInfo){
         spuService.saveSpu(spuInfo);

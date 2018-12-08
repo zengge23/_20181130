@@ -68,6 +68,33 @@
 
 <script language="JavaScript">
 
+    function initSpuInfoDlg() {
+        initSpuForm();
+        alert("55");
+        initSpuImgListDatagrid();
+        //初始化spu的销售属性列表的列属性
+        initSpuSaleAttrListDatagrid();
+        alert("4545")
+        //初始化spu的图片的列属性
+
+        alert("555");
+        //初始化上传控件
+        initUploader();
+    }
+
+    function initSpuImgListDatagrid(){
+        alert("qwe");
+        $("#spuImgDg").datagrid({
+            columns: [[
+                {field: 'fileId', title: '文件编号', width: 100},
+                {field: 'imgName', title: '文件简称', width: 100},
+                {field: 'progress', title: '上传进度', width: 100},
+                {field: 'imgState', title: '上传状态', width: 100},
+                {field: 'imgUrl', title: '图片地址', width: 100,hidden:true}
+            ]]
+        });
+    }
+
      function saveSpu(){
          //获取三级分类id
          var catalog3Id = $("#ctg3ForSpuList").combobox('getValue');
@@ -92,9 +119,7 @@
              });
              console.log(spuInfo);
          });
-         alert("test1");
          $.post("saveSpu",spuInfo,function(data){
-             alert("test2");
              $("#spu_dlg").dialog("close");
              var url = "getSpuList?catalog3Id=" + catalog3Id;
              $("#spulist_dg").datagrid({url:url});
@@ -118,39 +143,6 @@
 
      }
 
-    // function saveSpu() {
-    //     // 获得三级分类id
-    //     var catalog3Id = $("#ctg3ForSpuList").combobox('getValue');
-    //     if(!catalog3Id){
-    //         catalog3Id = '61';
-    //     }
-    //     // 获得spu的参数
-    //     var spuInfo = {};
-    //     spuInfo["spuName"] = $("#spuName").textbox("getValue");
-    //     spuInfo["description"] =$("#description").textbox("getValue");
-    //     spuInfo["catalog3Id"] =catalog3Id;
-    //
-    //     saleAttrRows = $("#spuSaleAttrDg").datagrid("getRows");
-    //     $(saleAttrRows).each(function(i,saleAttrRow){
-    //         spuInfo["spuSaleAttrList["+i+"].saleAttrId"]=saleAttrRow.saleAttrId;
-    //         spuInfo["spuSaleAttrList["+i+"].saleAttrName"]=saleAttrRow.saleAttrName;
-    //
-    //         // 封装属性值集合
-    //         spuSaleAttrValueJson = saleAttrRow.spuSaleAttrValueJson.rows;
-    //         $(spuSaleAttrValueJson).each(function(j,saleAttrValue){
-    //             spuInfo["spuSaleAttrList["+i+"].spuSaleAttrValueList["+j+"].saleAttrId"]=saleAttrRow.saleAttrId;
-    //             spuInfo["spuSaleAttrList["+i+"].spuSaleAttrValueList["+j+"].saleAttrValueName"]=saleAttrValue.saleAttrValueName;
-    //         });
-    //     });
-    //
-    //     $.post("saveSpu",spuInfo,function (data) {
-    //         $("#spu_dlg").dialog("close");
-    //         $("#spu_dlg").dialog("open");
-    //         var url = "getSpuList?catalog3Id="+catalog3Id;
-    //         $("#spulist_dg").datagrid({url:url});
-    //         $("#spulist_dg").datagrid("reload");
-    //     });
-    // }
 
     function closeSpu(){
         $("#spu_dlg").dialog("close");
@@ -162,18 +154,7 @@
 
     }
 
-    function initSpuInfoDlg() {
-
-        //初始化上传控件
-
-        //初始化spu的销售属性列表的列属性
-        initSpuImgListDatagrid();
-
-        //初始化spu的图片的列属性
-
-    }
-
-    function initSpuImgListDatagrid(){
+    function initSpuForm(){
         $("#spuSaleAttrDg").datagrid({
             columns: [[
                 {field: 'saleAttrId', title: '销售属性编号', width: 100},
