@@ -19,7 +19,7 @@
         <input id="description" name="description" class="easyui-textbox" data-options="multiline:true"
                style="width:600px;height:100px"/>
         <input id="spuId" name="spuId" type="hidden"/>
-        <br/><br/>
+        <br/>
                 <!----------------商品图片列表 ----------------------->
                
         <table id="spuImgDg" class="easyui-datagrid" title="商品图片列表"
@@ -27,7 +27,7 @@
 
                 <!----------------图片列表工具栏----------------------->
                 
-        <div id="spuImgTootbar" style="padding:5px;height:auto">
+        <div id="spuImgTootbar" style="padding:5px;height:40px">
                         
             <div style="margin-bottom:5px">
                 <a href="#" id="spuImgAdd" class="easyui-linkbutton" iconCls="icon-add" plain="true">添加图片</a>
@@ -44,7 +44,7 @@
 
                 <!----------------销售属性列表工具栏----------------------->
                 
-        <div id="spuSaleAttrTootbar" style="padding:5px;height:auto">
+        <div id="spuSaleAttrTootbar" style="padding:5px;height:40px">
                         
             <div style="margin-bottom:5px">
                 <a href="#" id="spuSaleAttrAddBtn" class="easyui-linkbutton" iconCls="icon-add"
@@ -62,45 +62,98 @@
 </div>
 <!----------------弹出框的按钮组----------------------->
 <div id="spuBtns">
-        <a href="#" class="easyui-linkbutton" onclick="saveSpu()">保 存</a>
-        <a href="#" class="easyui-linkbutton" onclick="closeSpu()">关 闭</a>
+        <a href="#" class="easyui-linkbutton" onclick="saveSpu();">保 存</a>
+        <a href="#" class="easyui-linkbutton" onclick="closeSpu();">关 闭</a>
 </div>
 
-<script>
+<script language="JavaScript">
 
-    function saveSpu(){
-        //获取三级分类id
-        var catalog3Id = $("#ctg3ForSpuList").combobox('getValue');
-        if (!catalog3Id) {
-            catalog3Id = '61';
-        }
-        //获得spu的参数
-        var spuInfo = {};
-        spuInfo["spuName"] = $("#spuName").textbox("getValue");
-        spuInfo["description"] = $("#description").textbox("getValue");
-        spuInfo["catalog3Id"] = catalog3Id;
-        saleAttrRows = $("#spuSaleAttrDg").datagrid("getRows");
-        $(saleAttrRows).each(function(i,saleAttrRow){
-            spuInfo["spuSaleAttrList[" + i + "].saleAttrId"] = saleAttrRow.saleAttrId;
-            spuInfo["spuSaleAttrList[" + i + "].saleAttrName"] = saleAttrRow.saleAttrName;
+     function saveSpu(){
+         //获取三级分类id
+         var catalog3Id = $("#ctg3ForSpuList").combobox('getValue');
+         if (!catalog3Id) {
+             catalog3Id = '61';
+         }
+         //获得spu的参数
+         var spuInfo = {};
+         spuInfo["spuName"] = $("#spuName").textbox("getValue");
+         spuInfo["description"] = $("#description").textbox("getValue");
+         spuInfo["catalog3Id"] = catalog3Id;
+         saleAttrRows = $("#spuSaleAttrDg").datagrid("getRows");
+         $(saleAttrRows).each(function(i,saleAttrRow){
+             spuInfo["spuSaleAttrList[" + i + "].saleAttrId"] = saleAttrRow.saleAttrId;
+             spuInfo["spuSaleAttrList[" + i + "].saleAttrName"] = saleAttrRow.saleAttrName;
 
-            //封装属性值集合
-            spuSaleAttrValueJson = saleAttrRow.spuSaleAttrValueJson.rows;
-            $(spuSaleAttrValueJson).each(function(j,saleAttrValue){
-                spuInfo["spuSaleAttrList[" + i + "].spuSaleAttrValueList[" + j + "].saleAttrId"] = saleAttrRow.saleAttrId;
-                spuInfo["spuSaleAttrList[" + i + "].spuSaleAttrValueList[" + j + "].saleAttrValueName"] = saleAttrValue.saleAttrValueName;
-            });
-            console.log(spuInfo);
-        });
-        $.post("saveSpu",spuInfo,function(data){
-            alert(data);
-        });
+             //封装属性值集合
+             spuSaleAttrValueJson = saleAttrRow.spuSaleAttrValueJson.rows;
+             $(spuSaleAttrValueJson).each(function(j,saleAttrValue){
+                 spuInfo["spuSaleAttrList[" + i + "].spuSaleAttrValueList[" + j + "].saleAttrId"] = saleAttrRow.saleAttrId;
+                 spuInfo["spuSaleAttrList[" + i + "].spuSaleAttrValueList[" + j + "].saleAttrValueName"] = saleAttrValue.saleAttrValueName;
+             });
+             console.log(spuInfo);
+         });
+         alert("test1");
+         $.post("saveSpu",spuInfo,function(data){
+             alert("test2");
+             $("#spu_dlg").dialog("close");
+             var url = "getSpuList?catalog3Id=" + catalog3Id;
+             $("#spulist_dg").datagrid({url:url});
+             $("#spulist_dg").datagrid("reload");
+         });
+         //
+         // $.ajax({
+         //     url: "saveSpu",
+         //     async: false,//这一步是非常重要的，作用是设置为同步执行
+         //     type: "POST",
+         //     data: { "state": 1 },
+         //     dataType: "json",
+         //     success: function (data) {
+         //         alert("success");
+         //         $("#spu_dlg").dialog("close");
+         //         var url = "getSpuList?catalog3Id=" + catalog3Id;
+         //         $("#spulist_dg").datagrid({url:url});
+         //         $("#spulist_dg").datagrid("reload");
+         //     }
+         // });
 
-        // $("#spu_dlg").datagrid("close");
-    }
+     }
+
+    // function saveSpu() {
+    //     // 获得三级分类id
+    //     var catalog3Id = $("#ctg3ForSpuList").combobox('getValue');
+    //     if(!catalog3Id){
+    //         catalog3Id = '61';
+    //     }
+    //     // 获得spu的参数
+    //     var spuInfo = {};
+    //     spuInfo["spuName"] = $("#spuName").textbox("getValue");
+    //     spuInfo["description"] =$("#description").textbox("getValue");
+    //     spuInfo["catalog3Id"] =catalog3Id;
+    //
+    //     saleAttrRows = $("#spuSaleAttrDg").datagrid("getRows");
+    //     $(saleAttrRows).each(function(i,saleAttrRow){
+    //         spuInfo["spuSaleAttrList["+i+"].saleAttrId"]=saleAttrRow.saleAttrId;
+    //         spuInfo["spuSaleAttrList["+i+"].saleAttrName"]=saleAttrRow.saleAttrName;
+    //
+    //         // 封装属性值集合
+    //         spuSaleAttrValueJson = saleAttrRow.spuSaleAttrValueJson.rows;
+    //         $(spuSaleAttrValueJson).each(function(j,saleAttrValue){
+    //             spuInfo["spuSaleAttrList["+i+"].spuSaleAttrValueList["+j+"].saleAttrId"]=saleAttrRow.saleAttrId;
+    //             spuInfo["spuSaleAttrList["+i+"].spuSaleAttrValueList["+j+"].saleAttrValueName"]=saleAttrValue.saleAttrValueName;
+    //         });
+    //     });
+    //
+    //     $.post("saveSpu",spuInfo,function (data) {
+    //         $("#spu_dlg").dialog("close");
+    //         $("#spu_dlg").dialog("open");
+    //         var url = "getSpuList?catalog3Id="+catalog3Id;
+    //         $("#spulist_dg").datagrid({url:url});
+    //         $("#spulist_dg").datagrid("reload");
+    //     });
+    // }
 
     function closeSpu(){
-        // $("#spu_dlg").datagrid("close");
+        $("#spu_dlg").dialog("close");
     }
 
     function addSpuSaleAttr(){
