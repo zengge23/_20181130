@@ -14,6 +14,9 @@ public class SkuServiceImpl implements SkuService {
 
     @Override
     public List<SkuInfo> skuInfoListBySpu(String spuId) {
-        return null;
+        SkuInfo skuInfo = new SkuInfo();
+        skuInfo.setSpuId(spuId);
+        List<SkuInfo> skuInfoList = skuInfoMapper.select(skuInfo);
+        return skuInfoList;
     }
 }

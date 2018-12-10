@@ -18,7 +18,7 @@ public class SkuController {
     @ResponseBody
     @RequestMapping("skuInfoListBySpu")
     public List<SkuInfo> skuInfoListBySpu(String spuId){
-
+        System.out.println(spuId);
         //根据spuId获取sku列表
         List<SkuInfo> skuInfos = skuService.skuInfoListBySpu(spuId);
         return skuInfos;
