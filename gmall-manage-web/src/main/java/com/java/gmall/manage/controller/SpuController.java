@@ -52,6 +52,7 @@ public class SpuController {
     public String fileUpload(@RequestParam("file") MultipartFile multipartFile){
         String imgUrl = GmallUploadUtil.uploadImage(multipartFile);
         //保存spu
+        System.out.println(imgUrl);
         return imgUrl;
     }
 
