@@ -1,14 +1,8 @@
 package com.java.gmall.manage.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.java.gmall.bean.BaseSaleAttr;
-import com.java.gmall.bean.SpuInfo;
-import com.java.gmall.bean.SpuSaleAttr;
-import com.java.gmall.bean.SpuSaleAttrValue;
-import com.java.gmall.manage.mapper.BaseSaleAttrMapper;
-import com.java.gmall.manage.mapper.SpuInfoMapper;
-import com.java.gmall.manage.mapper.SpuSaleAttrMapper;
-import com.java.gmall.manage.mapper.SpuSaleAttrValueMapper;
+import com.java.gmall.bean.*;
+import com.java.gmall.manage.mapper.*;
 import com.java.gmall.service.SpuService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -22,6 +16,9 @@ public class SpuServiceImpl implements SpuService {
 
     @Autowired
     BaseSaleAttrMapper baseSaleAttrMapper;
+
+    @Autowired
+    SpuImageMapper spuImageMapper;
 
     @Autowired
     SpuSaleAttrMapper spuSaleAttrMapper;
@@ -48,6 +45,11 @@ public class SpuServiceImpl implements SpuService {
         spuInfoMapper.insertSelective(spuInfo);
         String spuId = spuInfo.getId();
         //保存spu图片信息
+        List<SpuImage> spuImageList = spuInfo.getSpuImageList();
+        for(SpuImage spuImage : spuImageList){
+            spuImage.setSpuId(spuId);
+            spuImageMapper.insertSelective(spuImage);
+        }
 
         //保存spu的销售属性
         List<SpuSaleAttr> spuSaleAttrList = spuInfo.getSpuSaleAttrList();

@@ -72,10 +72,10 @@
         initSpuForm();
         //初始化spu的销售属性列表的列属性
         initSpuSaleAttrListDatagrid();
-        //初始化spu的图片的列属性
-        initSpuImgListDatagrid();
         //初始化上传控件
         initUploader();
+        //初始化spu的图片的列属性
+        initSpuImgListDatagrid();
     }
 
     function initSpuSaleAttrListDatagrid(){
@@ -135,7 +135,7 @@
             server: '/fileUpload',
             // 选择文件的按钮。
             pick: '#spuImgAdd',
-            // 不压缩image, 默认如果是jpeg，文件上传前会压缩后再上传！
+            // 不压缩image, 默认如果是jpeg，文件上传前会压缩后再上传！
             resize: false,
             //设定文件大小上限 20M
             fileSingleSizeLimit:20*1024*1024,
@@ -210,8 +210,15 @@
                  spuInfo["spuSaleAttrList[" + i + "].spuSaleAttrValueList[" + j + "].saleAttrId"] = saleAttrRow.saleAttrId;
                  spuInfo["spuSaleAttrList[" + i + "].spuSaleAttrValueList[" + j + "].saleAttrValueName"] = saleAttrValue.saleAttrValueName;
              });
-             console.log(spuInfo);
          });
+
+         //获取图片信息集合
+        var imgRows = $("#spuImgDg").datagrid("getRows");
+        $(imgRows).each(function(i,img){
+            spuInfo["spuImageList[" + i + "].imgName"] = img.imgName;
+            spuInfo["spuImageList[" + i + "].imgUrl"] = img.imgUrl;
+        });
+
          $.post("saveSpu",spuInfo,function(data){
              $("#spu_dlg").dialog("close");
              var url = "getSpuList?catalog3Id=" + catalog3Id;
