@@ -43,11 +43,25 @@
 
 <div th:include="spuInfoPage"></div>
 
-<!--<div th:include="skuInfoPage"></div>
+<!--<div th:include="skuInfoPage"></div>-->
 
-<div th:include="skuListPage"></div>-->
+<div th:include="skuListPage"></div>
 <script language="JavaScript">
-    function reloadSpuList() {
+
+    function showSkuInfoList(){
+        var spuRow = $("#spulist_dg").datagrid("getSelected");
+        if(spuRow){
+            $("#skulist_dlg").dialog("open");
+            // $("#skulist_dg").datagrid("open");
+            //初始化sku列表
+            initSkuListDatagrid(spuRow.id);
+        }else{
+            alert("请选择一个spu");
+        }
+
+    }
+
+    function reloadSpuList(){
         // 获得三级分类id
         var catalog3Id = $("#ctg3ForSpuList").combobox('getValue');
         if (!catalog3Id) {
@@ -77,9 +91,6 @@
 
     }
 
-    function showSkuInfoList() {
-
-    }
 </script>
 </body>
 </html>
