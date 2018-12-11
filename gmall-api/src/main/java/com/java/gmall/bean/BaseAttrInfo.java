@@ -11,6 +11,8 @@ public class BaseAttrInfo implements Serializable {
     private String attrName;
     private Integer catalog3Id;
     private String isEnabled;
+    @Transient
+    List<BaseAttrValue> attrValueList;
 
     public Integer getId() {
         return id;
@@ -51,8 +53,5 @@ public class BaseAttrInfo implements Serializable {
     public void setAttrValueList(List<BaseAttrValue> attrValueList) {
         this.attrValueList = attrValueList;
     }
-
-    List<BaseAttrValue> attrValueList;
-
 
 }

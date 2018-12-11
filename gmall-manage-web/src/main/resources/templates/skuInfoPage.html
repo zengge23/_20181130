@@ -47,5 +47,57 @@
         <a href="#" class="easyui-linkbutton" onclick="closeSku()">关闭</a>
     </div>
 
+    <script language="JavaScript">
+        function initSkuInfoDlg(spuId,catalog3Id){
+
+            //初始化平台属性
+            initAttrInfoGroup(catalog3Id);
+
+            //初始化销售属性
+            initSpuSaleAttrGroup(spuId,skuInfo);
+
+            //初始化图片列表
+            initSkuImgListDatagrid(spuId);
+
+        }
+
+        function initAttrInfoGroup(catalog3Id){
+            $.post("attrInfoList?catalog3Id=" + catalog3Id,{catalog3Id:catalog3Id},function(data){
+                $(data).each(function (i,attr) {
+                    spanBegin="<span>";
+
+                    var attrName = attr.attrName;
+                    selectBegin = "<select>";
+                    options = "";
+                    var attrValues = attr.attrValueList;
+                    $(attrValues).each(function (i,attrValue){
+                        options = options + "<option>" + attrValue.valueName + "</option>"
+                    });
+                    selectEnd = "</select>";
+                    spanEnd="</span>";
+                    $("#attrInfoGroup").append(spanBegin + selectBegin + options + selectEnd + spanEnd);
+                })
+            });
+
+        }
+
+        function initSpuSaleAttrGroup(spuId,skuInfo){
+        }
+
+        function initSkuImgListDatagrid(spuId){
+        }
+
+        function saveSku() {
+            skuInfo = {};
+            alert("保存");
+            //获取平台属性
+            var attrSpans = $("#attrInfoGroup").children("span");
+            $(attrSpans).each(function(i,attrId){
+                skuInfo["skuAttrValueList[0].attrId"]
+                skuInfo["skuAttrValueList[0].valueId"]
+            });
+        }
+    </script>
+
 </body>
 </html>

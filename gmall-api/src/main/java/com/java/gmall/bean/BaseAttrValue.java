@@ -1,5 +1,6 @@
 package com.java.gmall.bean;
 
+import javax.persistence.Transient;
 import java.io.Serializable;
 
 public class BaseAttrValue implements Serializable {
@@ -7,6 +8,7 @@ public class BaseAttrValue implements Serializable {
     private String valueName;
     private Integer attrId;
     private String isEnabled;
+    @Transient
     private String urlParam;
 
     public Integer getId() {

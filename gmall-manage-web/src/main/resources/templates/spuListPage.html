@@ -88,10 +88,16 @@
     }
 
     function addSkuInfo() {
+        // 获得三级分类id
+        var catalog3Id = $("#ctg3ForSpuList").combobox('getValue');
+        if (!catalog3Id) {
+            catalog3Id = '61';
+        }
         var spuRow = $("#spulist_dg").datagrid("getSelected");
         if(spuRow){
             $("#sku_dlg").dialog("open");
             //初始化sku对话框
+            initSkuInfoDlg(spuRow.id,catalog3Id);
         }else{
             alert("请选择一个spu");
         }

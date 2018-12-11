@@ -1,7 +1,9 @@
 package com.java.gmall.manage.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.java.gmall.bean.BaseAttrInfo;
 import com.java.gmall.bean.SkuInfo;
+import com.java.gmall.service.BaseAttrService;
 import com.java.gmall.service.SkuService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +17,9 @@ public class SkuController {
     @Reference
     SkuService skuService;
 
+    @Reference
+    BaseAttrService baseAttrService;
+
     @ResponseBody
     @RequestMapping("skuInfoListBySpu")
     public List<SkuInfo> skuInfoListBySpu(String spuId){
@@ -22,5 +27,13 @@ public class SkuController {
         //根据spuId获取sku列表
         List<SkuInfo> skuInfos = skuService.skuInfoListBySpu(spuId);
         return skuInfos;
+    }
+
+    @ResponseBody
+    @RequestMapping("attrInfoList")
+    public List<BaseAttrInfo> attrInfoList(Integer catalog3Id){
+        List<BaseAttrInfo> baseAttrInfos = baseAttrService.attrInfoList(catalog3Id);
+
+        return baseAttrInfos;
     }
 }
