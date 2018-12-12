@@ -37,7 +37,6 @@ public class SkuServiceImpl implements SkuService {
     @Override
     public void saveSku(SkuInfo skuInfo) {
         skuInfoMapper.insertSelective(skuInfo);
-        skuInfoMapper.insertSelective(skuInfo);
         String skuId = skuInfo.getId();
 
         //保存sku图片信息

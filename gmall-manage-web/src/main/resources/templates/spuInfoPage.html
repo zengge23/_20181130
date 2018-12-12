@@ -220,7 +220,6 @@
         });
 
          $.post("saveSpu",spuInfo,function(data){
-             $("#spu_dlg").dialog("close");
              var url = "getSpuList?catalog3Id=" + catalog3Id;
              $("#spulist_dg").datagrid({url:url});
              $("#spulist_dg").datagrid("reload");
