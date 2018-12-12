@@ -30,6 +30,9 @@ public class SkuController {
     @ResponseBody
     public String saveSku(SkuInfo skuInfo){
 
+        //保存sku
+        skuService.saveSku(skuInfo);
+
         return "success";
     }
 

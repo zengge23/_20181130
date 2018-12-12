@@ -1,10 +1,8 @@
 package com.java.gmall.manage.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.java.gmall.bean.BaseAttrInfo;
-import com.java.gmall.bean.SkuInfo;
-import com.java.gmall.manage.mapper.BaseAttrInfoMapper;
-import com.java.gmall.manage.mapper.SkuInfoMapper;
+import com.java.gmall.bean.*;
+import com.java.gmall.manage.mapper.*;
 import com.java.gmall.service.SkuService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,6 +15,15 @@ public class SkuServiceImpl implements SkuService {
     SkuInfoMapper skuInfoMapper;
 
     @Autowired
+    SkuImageMapper skuImageMapper;
+
+    @Autowired
+    SkuAttrValueMapper skuAttrValueMapper;
+
+    @Autowired
+    SkuSaleAttrValueMapper skuSaleAttrValueMapper;
+
+    @Autowired
     BaseAttrInfoMapper baseAttrInfoMapper;
 
     @Override
@@ -25,6 +32,34 @@ public class SkuServiceImpl implements SkuService {
         skuInfo.setSpuId(spuId);
         List<SkuInfo> skuInfoList = skuInfoMapper.select(skuInfo);
         return skuInfoList;
+    }
+
+    @Override
+    public void saveSku(SkuInfo skuInfo) {
+        skuInfoMapper.insertSelective(skuInfo);
+        skuInfoMapper.insertSelective(skuInfo);
+        String skuId = skuInfo.getId();
+
+        //保存sku图片信息
+        List<SkuImage> skuImageList = skuInfo.getSkuImageList();
+        for(SkuImage skuImage : skuImageList){
+            skuImage.setSkuId(skuId);
+            skuImageMapper.insertSelective(skuImage);
+        }
+
+        //保存sku平台属性
+        List<SkuAttrValue> skuAttrValueList = skuInfo.getSkuAttrValueList();
+        for(SkuAttrValue skuAttrValue : skuAttrValueList){
+            skuAttrValue.setSkuId(skuId);
+            skuAttrValueMapper.insertSelective(skuAttrValue);
+        }
+
+        //保存sku的销售属性
+        List<SkuSaleAttrValue> skuSaleAttrValueList = skuInfo.getSkuSaleAttrValueList();
+        for(SkuSaleAttrValue skuSaleAttrValue : skuSaleAttrValueList){
+            skuSaleAttrValue.setSkuId(skuId);
+            skuSaleAttrValueMapper.insertSelective(skuSaleAttrValue);
+        }
     }
 
 //    @Override

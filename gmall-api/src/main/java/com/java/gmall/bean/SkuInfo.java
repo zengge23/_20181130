@@ -135,4 +135,5 @@ public class SkuInfo  implements Serializable {
     public void setSkuSaleAttrValueList(List<SkuSaleAttrValue> skuSaleAttrValueList) {
         this.skuSaleAttrValueList = skuSaleAttrValueList;
     }
+
 }
