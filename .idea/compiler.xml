@@ -14,13 +14,8 @@
         <module name="gmall-manage-web" />
         <module name="gmall-service-util" />
         <module name="gmall-user" />
-        <module name="gmall-web-util" />
-      </profile>
-      <profile name="Annotation profile for gamll-user-web" enabled="true">
-        <sourceOutputDir name="../gamll-user-web/target/generated-sources/annotations" />
-        <sourceTestOutputDir name="../gamll-user-web/target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
         <module name="gmall-user-web" />
+        <module name="gmall-web-util" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
