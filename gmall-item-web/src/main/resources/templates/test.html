@@ -5,7 +5,23 @@
     <title>Title</title>
 </head>
 <body>
-        商品详情:</br>
-        取值:<div th:text="${hello}">is div</div>
+        商品详情:<br/>
+        取值:<div th:text="${hello}">is div</div><br/>
+        判断:<div th:if="1!=1">OK</div><br/>
+        <div th:text="(${num}!='2')?'OK':'NULL'"></div><br/>
+        循环:
+        <div th:each="string:${list}" th:text="${string}">OK</div>
+        <div th:each="string:${list}">
+            <input type="text" th:value="${string}" value="555"/>
+        </div><br/>
+        js函数调用
+        <a th:href="'javascript:a(\''+${name}+'\');'">调用a()函数</a>
+
+
+    <script language="JavaScript">
+        function a(name){
+            alert(name);
+        }
+    </script>
 </body>
 </html>
