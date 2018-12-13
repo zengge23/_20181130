@@ -1,10 +1,14 @@
 package com.java.gmall.manage.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSON;
 import com.java.gmall.bean.*;
 import com.java.gmall.manage.mapper.*;
 import com.java.gmall.service.SkuService;
+import com.java.gmall.util.RedisUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import redis.clients.jedis.Jedis;
 
 import java.util.List;
 
@@ -25,6 +29,9 @@ public class SkuServiceImpl implements SkuService {
 
     @Autowired
     BaseAttrInfoMapper baseAttrInfoMapper;
+
+    @Autowired
+    RedisUtil redisUtil;
 
     @Override
     public List<SkuInfo> skuInfoListBySpu(String spuId) {
@@ -63,6 +70,25 @@ public class SkuServiceImpl implements SkuService {
 
     @Override
     public SkuInfo getSkuById(String skuId) {
+        SkuInfo skuInfo = null;
+        //查询缓存
+        Jedis jedis = redisUtil.getJedis();
+        String skuKey = jedis.get("sku"+skuId+":info");
+        String cacheJson = jedis.get(skuKey);
+        if(StringUtils.isBlank(cacheJson)){
+            //缓存查询未果查询数据库
+            skuInfo = getSkuByIdFromDb(skuId);
+
+            //将数据库的信息同步到缓存
+            jedis.set("sku:" + skuId +":Info", JSON.toJSONString(skuInfo));
+        }else{
+            skuInfo = JSON.parseObject(cacheJson, SkuInfo.class);
+        }
+
+        return skuInfo;
+    }
+
+    private SkuInfo getSkuByIdFromDb(String skuId) {
         SkuInfo skuInfo = skuInfoMapper.selectByPrimaryKey(skuId);
 
         SkuImage skuImage = new SkuImage();

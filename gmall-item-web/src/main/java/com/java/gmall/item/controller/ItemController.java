@@ -1,7 +1,9 @@
 package com.java.gmall.item.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.alibaba.fastjson.JSON;
 import com.java.gmall.bean.SkuInfo;
+import com.java.gmall.bean.SkuSaleAttrValue;
 import com.java.gmall.bean.SpuSaleAttr;
 import com.java.gmall.service.SkuService;
 import com.java.gmall.service.SpuService;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -37,7 +40,18 @@ public class ItemController {
         //根据spuId制作页面销售属性的hash表
         //销售属性集合:skuId
         List<SkuInfo> skuInfos = skuService.skuSaleAttrValueListBySpu(spuId);
-
+        HashMap<String, String> stringStringHashMap = new HashMap<>();
+        for(SkuInfo info : skuInfos){
+            String skuSaleAttrValueIdKey = "";
+            List<SkuSaleAttrValue> skuSaleAttrValueList = info.getSkuSaleAttrValueList();
+            for(SkuSaleAttrValue SkuSaleAttrValue : skuSaleAttrValueList) {
+                skuSaleAttrValueIdKey = skuSaleAttrValueIdKey + "|" + SkuSaleAttrValue.getSaleAttrValueId();
+            }
+            String skuIdValue = info.getId();
+            stringStringHashMap.put(skuSaleAttrValueIdKey,skuIdValue);
+        }
+        String s = JSON.toJSONString(stringStringHashMap);
+        map.put("valuesSkuJson",s);
         return "item";
     }
 
