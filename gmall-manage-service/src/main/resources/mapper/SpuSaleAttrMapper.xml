@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java.gmall.manage.mapper.SpuSaleAttrMapper">
+    <select id="selectSpuSaleAttrListBySpuId" parameterType="Map" resultMap="selectSpuSaleAttrListBySpuIdMap">
+        SELECT
+            sa.id AS sa_id,
+            sav.id AS sav_id,
+            sa.*, sav.*,
+        IF(skv.sku_id,1,0) AS isChecked
+        FROM
+            spu_sale_attr sa
+        INNER JOIN spu_sale_attr_value sav
+        ON sa.sale_attr_id = sav.sale_attr_id
+        AND sa.spu_id = sav.spu_id
+        AND sa.spu_id = #{spuId}
+        LEFT JOIN sku_sale_attr_value skv
+        ON skv.sale_attr_id = sa.sale_attr_id
+        AND skv.sale_attr_value_id = sav.id
+        AND skv.sku_id = #{skuId}
+    </select>
+    <resultMap id="selectSpuSaleAttrListBySpuIdMap" type="com.java.gmall.bean.SpuSaleAttr" autoMapping="true">
+        <id column="sa_id" property="id"></id>
+        <!--<result column="login_name" property="loginName"></result>-->
+        <!--<result column="nick_name" property="nickName"></result>-->
+        <!--<result column="password" property="password"></result>-->
+        <!--<result column="name" property="name"></result>-->
+        <!--<result column="phone_num" property="phoneNum"></result>-->
+        <!--<result column="email" property="email"></result>-->
+        <!--<result column="headImg" property="head_img"></result>-->
+        <!--<result column="userLevel" property="user_level"></result>-->
+        <collection property="spuSaleAttrValueList" ofType="com.java.gmall.bean.SpuSaleAttrValue" autoMapping="true">
+            <!--<id column="address_id" property="id"></id>-->
+            <result column="sa_id" property="id"></result>
+            <!--<result column="user_address" property="userAddress"></result>-->
+            <!--<result column="user_id" property="userId"></result>-->
+            <!--<result column="consignee" property="consignee"></result>-->
+            <!--<result column="phone_num" property="phoneNum"></result>-->
+            <!--<result column="is_default" property="isDefault"></result>-->
+        </collection>
+
+    </resultMap>
+</mapper>

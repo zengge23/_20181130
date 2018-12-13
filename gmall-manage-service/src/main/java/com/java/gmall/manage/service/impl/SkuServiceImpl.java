@@ -61,6 +61,23 @@ public class SkuServiceImpl implements SkuService {
         }
     }
 
+    @Override
+    public SkuInfo getSkuById(String skuId) {
+        SkuInfo skuInfo = skuInfoMapper.selectByPrimaryKey(skuId);
+
+        SkuImage skuImage = new SkuImage();
+        skuImage.setSkuId(skuId);
+        List<SkuImage> skuImages = skuImageMapper.select(skuImage);
+        skuInfo.setSkuImageList(skuImages);
+        return skuInfo;
+    }
+
+    @Override
+    public List<SkuInfo> skuSaleAttrValueListBySpu(String spuId) {
+        List<SkuInfo> skuInfos = skuSaleAttrValueMapper.selectSkuSaleAttrValueListBySpu(spuId);
+        return skuInfos;
+    }
+
 //    @Override
 //    public List<BaseAttrInfo> attrInfoList(Integer catalog3Id) {
 //        BaseAttrInfo baseAttrInfo = new BaseAttrInfo();

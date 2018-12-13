@@ -12,5 +12,9 @@ public interface SkuService {
 
     void saveSku(SkuInfo skuInfo);
 
+    SkuInfo getSkuById(String skuId);
+
+    List<SkuInfo> skuSaleAttrValueListBySpu(String spuId);
+
 //    List<BaseAttrInfo> attrInfoList(Integer catalog3Id);
 }

@@ -6,7 +6,9 @@ import com.java.gmall.manage.mapper.*;
 import com.java.gmall.service.SpuService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class SpuServiceImpl implements SpuService {
@@ -88,5 +90,14 @@ public class SpuServiceImpl implements SpuService {
         spuImage.setSpuId(spuId);
         List<SpuImage> spuImages = spuImageMapper.select(spuImage);
         return spuImages;
+    }
+
+    @Override
+    public List<SpuSaleAttr> SpuSaleAttrListBySpuId(String spuId,String skuId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("skuId",skuId);
+        map.put("spuId",spuId);
+        List<SpuSaleAttr> spuSaleAttrs = spuSaleAttrMapper.selectSpuSaleAttrListBySpuId(map);
+        return spuSaleAttrs;
     }
 }
