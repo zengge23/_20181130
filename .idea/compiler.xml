@@ -10,6 +10,7 @@
         <module name="gmall-api" />
         <module name="gmall-common-util" />
         <module name="gmall-item-web" />
+        <module name="gmall-list-service" />
         <module name="gmall-manage-service" />
         <module name="gmall-manage-web" />
         <module name="gmall-service-util" />

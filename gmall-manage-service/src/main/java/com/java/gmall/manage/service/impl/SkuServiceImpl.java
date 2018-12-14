@@ -73,18 +73,34 @@ public class SkuServiceImpl implements SkuService {
         SkuInfo skuInfo = null;
         //查询缓存
         Jedis jedis = redisUtil.getJedis();
-        String skuKey = jedis.get("sku"+skuId+":info");
-        String cacheJson = jedis.get(skuKey);
+        String cacheJson = jedis.get("sku:"+skuId+":info");
         if(StringUtils.isBlank(cacheJson)){
-            //缓存查询未果查询数据库
-            skuInfo = getSkuByIdFromDb(skuId);
+            //分布式缓存锁服务器取锁
+            String OK = jedis.set("sku:"+skuId+":lock","1","nx","px",10000);
+            if(StringUtils.isNotBlank(OK)){
+                //缓存查询未果查询数据库
+                skuInfo = getSkuByIdFromDb(skuId);
+                if(skuInfo != null){
+                    //将数据库的信息同步到缓存
+                    jedis.set("sku:" + skuId +":info", JSON.toJSONString(skuInfo));
+                    jedis.del("sku:"+skuId+":lock");
+                }else{
+                    //在缓存中加入有超时时间的空值
+                }
+            }else{
+                try{
+                    Thread.sleep(3000);
+                }catch(InterruptedException e){
+                    e.printStackTrace();
+                }
+                //自旋
+                return getSkuById(skuId);
+            }
 
-            //将数据库的信息同步到缓存
-            jedis.set("sku:" + skuId +":Info", JSON.toJSONString(skuInfo));
         }else{
             skuInfo = JSON.parseObject(cacheJson, SkuInfo.class);
         }
-
+        jedis.close();
         return skuInfo;
     }
 
