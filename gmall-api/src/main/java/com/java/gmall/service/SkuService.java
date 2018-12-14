@@ -16,5 +16,7 @@ public interface SkuService {
 
     List<SkuInfo> skuSaleAttrValueListBySpu(String spuId);
 
+    List<SkuInfo> getMySkuInfo(String catalog3Id);
+
 //    List<BaseAttrInfo> attrInfoList(Integer catalog3Id);
 }

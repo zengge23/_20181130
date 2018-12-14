@@ -1,6 +1,7 @@
 package com.java.gmall.bean;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * @param
@@ -14,9 +15,19 @@ public class SkuLsParam implements Serializable{
 
     String keyword;
 
+    BigDecimal price;
+
     int  pageNo=1;
 
     int pageSize=20;
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
 
     public String getCatalog3Id() {
         return catalog3Id;

@@ -7,6 +7,7 @@ import com.java.gmall.manage.mapper.*;
 import com.java.gmall.service.SkuService;
 import com.java.gmall.util.RedisUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.beans.factory.annotation.Autowired;
 import redis.clients.jedis.Jedis;
 
@@ -117,6 +118,23 @@ public class SkuServiceImpl implements SkuService {
     @Override
     public List<SkuInfo> skuSaleAttrValueListBySpu(String spuId) {
         List<SkuInfo> skuInfos = skuSaleAttrValueMapper.selectSkuSaleAttrValueListBySpu(spuId);
+        return skuInfos;
+    }
+
+    @Override
+    public List<SkuInfo> getMySkuInfo(String catalog3Id) {
+
+        SkuInfo skuInfo = new SkuInfo();
+        skuInfo.setCatalog3Id(catalog3Id);
+        List<SkuInfo> skuInfos = skuInfoMapper.select(skuInfo);
+
+        for(SkuInfo info : skuInfos){
+            String skuId = info.getId();
+            SkuAttrValue skuAttrValue = new SkuAttrValue();
+            skuAttrValue.setSkuId(skuId);
+            List<SkuAttrValue> skuAttrValues = skuAttrValueMapper.select(skuAttrValue);
+            info.setSkuAttrValueList(skuAttrValues);
+        }
         return skuInfos;
     }
 
