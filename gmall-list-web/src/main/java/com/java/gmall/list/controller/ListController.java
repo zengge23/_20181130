@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ListController {
 
     @RequestMapping("list")
-    public String list(){
+    public String list(String catalog3Id){
         return "list";
     }
 
