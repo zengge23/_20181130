@@ -12,6 +12,7 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.TermQueryBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.highlight.HighlightBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -43,6 +44,14 @@ public class ListServiceimpl implements ListService {
         for(SearchResult.Hit<SkuLsInfo,Void> hit : hits){
             SkuLsInfo source = hit.source;
             skuLsInfos.add(source);
+
+            //替换高亮字段
+            if(null != hit.highlight){
+                List<String> skuName = hit.highlight.get("skuName");
+                String s = skuName.get(0);
+                source.setSkuName(s);
+            }
+            skuLsInfos.add(source);
         }
         return skuLsInfos;
     }
@@ -57,6 +66,13 @@ public class ListServiceimpl implements ListService {
         if(StringUtils.isNotBlank(keyword)){
             MatchQueryBuilder matchQueryBuilder = new MatchQueryBuilder("skuName",keyword);
             boolQueryBuilder.must(matchQueryBuilder);
+
+            //高亮 highlight
+            HighlightBuilder highlightBuilder = new HighlightBuilder();
+            highlightBuilder.preTags("<span style='color:red;font-weight:bolder;'>");
+            highlightBuilder.field("skuName");
+            highlightBuilder.postTags("</span>");
+            searchSourceBuilder.highlight(highlightBuilder);
         }
 
         //filter
