@@ -7,10 +7,15 @@ import com.java.gmall.service.ListService;
 import io.searchbox.client.JestClient;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
+import io.searchbox.core.search.aggregation.Aggregation;
+import io.searchbox.core.search.aggregation.MetricAggregation;
+import io.searchbox.core.search.aggregation.TermsAggregation;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.TermQueryBuilder;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.bucket.terms.TermsBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.highlight.HighlightBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +58,20 @@ public class ListServiceimpl implements ListService {
             }
             skuLsInfos.add(source);
         }
+        //取聚合对象
+        MetricAggregation aggregations = execute.getAggregations();
+        //声明聚合的valueId的集合
+        List<String> attrValueIdList = new ArrayList<>();
+        TermsAggregation groupby_attr = aggregations.getTermsAggregation("groupby_attr");
+        if(groupby_attr != null){
+            List<TermsAggregation.Entry> buckets = groupby_attr.getBuckets();
+            for(TermsAggregation.Entry bucket : buckets){
+                //去聚合函数中的valueId
+                attrValueIdList.add(bucket.getKey());//聚合的字段值,属性值id
+                Long count = bucket.getCount();//聚合字段值出现的次数
+            }
+        }
+
         return skuLsInfos;
     }
 
@@ -89,6 +108,10 @@ public class ListServiceimpl implements ListService {
         //分页
         searchSourceBuilder.size(20);
         searchSourceBuilder.from(0);
+
+        //加聚合函数
+        TermsBuilder groupby_attr = AggregationBuilders.terms("groupby_attr").field("skuAttrValueList.valueId");
+        searchSourceBuilder.aggregation(groupby_attr);
 
         return searchSourceBuilder.toString();
     }
