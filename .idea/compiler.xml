@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="fastdfs-client-java" />
         <module name="gmall-api" />
+        <module name="gmall-cart-service" />
         <module name="gmall-cart-web" />
         <module name="gmall-common-util" />
         <module name="gmall-item-web" />

@@ -119,15 +119,16 @@
                         <ul>
                             <li th:each="skuImage:${skuInfo?.skuImageList}">
                                 <img th:src="${skuImage.imgUrl}"/>
-                                <!--								<li><img src="/img/59ded62eN64a9784c.jpg" /></li>
-                                                                <li><img src="/img/59ded626Ne3c69b70.jpg" /></li>
-                                                                <li><img src="/img/59ded626N7c4cb0a3.jpg" /></li>
-                                                                <li><img src="/img/59ded626Ne3c69b70.jpg" /></li>
-                                                                <li><img src="/img/59ded62dN7e28abc5 (1).jpg" /></li>
-                                                                <li><img src="/img/59ded62cN6e9ac17c.jpg" /></li>
-                                                                <li><img src="/img/59ded620Nfc0ab489.jpg" /></li>
-                                                                <li><img src="/img/59ded60eN3110f3a8.jpg" /></li>
-                                                                <li><img src="/img/59ded62dNfed003a8.jpg" /></li>-->
+                                <!--
+                                <li><img src="/img/59ded62eN64a9784c.jpg" /></li>
+                                <li><img src="/img/59ded626Ne3c69b70.jpg" /></li>
+                                <li><img src="/img/59ded626N7c4cb0a3.jpg" /></li>
+                                <li><img src="/img/59ded626Ne3c69b70.jpg" /></li>
+                                <li><img src="/img/59ded62dN7e28abc5 (1).jpg" /></li>
+                                <li><img src="/img/59ded62cN6e9ac17c.jpg" /></li>
+                                <li><img src="/img/59ded620Nfc0ab489.jpg" /></li>
+                                <li><img src="/img/59ded60eN3110f3a8.jpg" /></li>
+                                <li><img src="/img/59ded62dNfed003a8.jpg" /></li>-->
                             </li>
                         </ul>
                     </div>
@@ -265,7 +266,7 @@
 
                 <div class="box-btns clear">
                     <div class="box-btns-one">
-                        <form id="itemForm" action="http://cart.gmall.com:8087/addToCart" method="post">
+                        <form id="itemForm" action="http://cart.gmall.com:8084/addToCart" method="post">
                             <input type="text" name="num" id="" value="1"/>
                             <input type="hidden" name="skuId" th:value="${skuInfo?.id}"/>
 
@@ -1048,7 +1049,7 @@
         // 被选中属性
         var key = "";
         var selectValueRows = $(".redborder div");
-        $(selectValueRows).each(function(i,div){
+        $(selectValueRows).each(function (i, div) {
             var saleAttrValueId = $(div).attr("value");
             key = key + "|" + saleAttrValueId;
         })
@@ -1060,11 +1061,11 @@
 
         var v = hashJson[key];
         var skuId = $("#skuId").val();
-        if(v&&v!=skuId){
+        if (v && v != skuId) {
             //跳转新的sku
             alert("跳转新的sku");
-            window.location.href="/" + v +".html";
-        }else{
+            window.location.href = "/" + v + ".html";
+        } else {
             //NULL!
         }
         alert(v);
