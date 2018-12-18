@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class CartController {
 
     @RequestMapping("addToCart")
-    public String addToCart(String skuId, int num){
+    public String addToCart(String skuId, String num){
 
         return "redirect:/cartAddSuccess";
     }
