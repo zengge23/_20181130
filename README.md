@@ -12,4 +12,8 @@ gmall-item-web:8082
 gmall-list-service:8073
 
 gamll-list-web:8083
+***
+gmall-cart-web:8084
+
+gmall-cart-service:8074
 
