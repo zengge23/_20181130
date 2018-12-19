@@ -14,10 +14,8 @@
 <header>
     <a name="mao1">
         <div class="header">
-
             <ul class="header-left">
                 <li>
-
                     <a href="">首页</a>
                 </li>
 
@@ -36,11 +34,7 @@
     </a>
 </header>
 
-
-
-
 <div class="one_search">
-
     <div class="one_sousuo">
         <div class="one_search_top">
             <div class="one_top_left">
@@ -59,127 +53,8 @@
         </div>
     </div>
 </div>
-<div class="One_BdyShop">
-    <div class="OneBdy_box">
-        <div class="One_tabTop">
-            <div class="One_Topleft">
-                <span>全部商品 </span>
 
-            </div>
-
-        </div>
-        <div class="One_ShopTop">
-            <ul>
-                <li><input type="checkbox" class="allCheck">全选</li>
-                <li>商品</li>
-                <li>单价</li>
-                <li>数量</li>
-                <li>小计</li>
-                <li>操作</li>
-            </ul>
-        </div>
-
-        <div class="One_ShopCon">
-            <ul>
-                <li  th:each="cartInfo:${cartList}">
-                    <div> </div>
-
-                    <div>
-                        <ol>
-                            <li><input type="checkbox"   class="check"  th:value="${cartInfo.skuId}"  onchange="checkSku(this)" th:checked="(${cartInfo.isChecked}==1)?'true':'false'" /></li>
-                            <li>
-                                <dt><img  th:src="${cartInfo.imgUrl}"  src="img\shop1.jpg" alt=""></dt>
-                                <dd  th:onclick="'toItem('+${cartInfo.skuId}+')'">
-                                    <p>
-                                        <span th:text="${cartInfo.skuName}" >TCL 55A950C 55英寸32核</span>
-                                    </p>
-                                </dd>
-                            </li>
-                            <li>
-                                <p class="dj" th:text="'￥'+${cartInfo.skuPrice}" >4599.00</p>
-                            </li>
-                            <li>
-                                <p>
-                                    <span>-</span>
-                                    <span th:text="${cartInfo.skuNum}">5</span>
-                                    <span>+</span>
-                                </p>
-                            </li>
-                            <li style="font-weight:bold"><p class="zj" th:text="'￥'+${cartInfo.totalPrice}"  >￥22995.00</p></li>
-                            <li>
-                                <p>删除</p>
-                            </li>
-                        </ol>
-                    </div>
-                </li>
-                <!--<li>
-                    <div>
-                    </div>
-                    <div>
-                        <ol>
-                            <li><input type="checkbox"  class="check"></li>
-                            <li>
-                                <dt><img src="img\shop1.jpg" alt=""></dt>
-                                <dd>
-                                    <p>
-
-                                        <span>TCL 55A950C 55英寸32核</span>
-                                        <span>尺码: 55时 超薄曲面 人工智能</span>
-                                    </p>
-                                    <p>人工智能 HDR曲面超薄4K电视金属机</p>
-
-                                </dd>
-                            </li>
-                            <li>
-                                <p class="dj">￥4599.00</p>
-
-                            </li>
-                            <li>
-                                <p>
-                                    <span>-</span>
-                                    <span>5</span>
-                                    <span>+</span>
-                                </p>
-
-                            </li>
-                            <li style="font-weight:bold"><p class="zj">￥22995.00</p></li>
-                            <li>
-                                <p>删除</p>
-
-                            </li>
-                        </ol>
-                    </div>
-                </li>-->
-
-            </ul>
-        </div>
-        <div class="One_ShopFootBuy fix1">
-            <div>
-                <ul>
-                    <li><input type="checkbox" class="allCheck"><span>全选</span></li>
-                    <li>删除选中的商品</li>
-                    <li>移到我的关注</li>
-                    <li>清除下柜商品</li>
-                </ul>
-            </div>
-            <div>
-                 <font style="color:#e64346;font-weight:bold;" class="sumNum"> </font>&nbsp;
-
-                <ul>
-                    <li><img src="img/buyNumleft.png" alt=""></li>
-                    <li><img src="img/buyNumright.png" alt=""></li>
-                </ul>
-            </div>
-            <div>
-                <ol>
-                    <li>总价:<span style="color:#e64346;font-weight:bold;font-size:16px;" class="fnt">￥0.00</span>  </li>
-
-                </ol>
-            </div>
-            <div><button  onclick="toTrade()" type="button">去结算</button></div>
-        </div>
-    </div>
-</div>
+<div id="cartListInner" th:include="cartListInner"></div>
 
 <div class="One_isDel">
     <p>
@@ -236,26 +111,6 @@
     </dl>
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <!--底部-->
 
 <div class="one_footer">
@@ -266,28 +121,32 @@
 <script type="text/javascript">
 
      function toTrade(){
-         window.location.href="http://cart.gmall.com:8087/toTrade";
+         window.location.href="http://order.gmall.com:8084/toTrade";
     }
     function toItem(skuId) {
         window.location.href="http://item.gmall.com:8084/"+skuId+".html";
     }
 
     function login(){
-      var s = encodeURIComponent("http://cart.gmall.com:8087/cartList");
+      var s = encodeURIComponent("http://cart.gmall.com:8084/cartList");
        window.location.href="http://passport.atguigu.com/index?originUrl="+s;
     }
 
-    function checkSku( chkbox){
+    function checkSku(chkbox){
        var skuId= $(chkbox).attr("value");
        var checked=$(chkbox).prop("checked");
        var isCheckedFlag="0";
        if(checked){
            isCheckedFlag="1";
        }
-        var param="isChecked="+isCheckedFlag+"&"+"skuId="+skuId;
-        $.post("checkCart",param,function (data) {
-            sumSumPrice();
-        });
+
+       $.post("checkCart",{skuId:skuId,isCheckedFlag:isCheckedFlag},function(data){
+            $("#cartListInner").html(data);
+       })
+        // var param="isChecked="+isCheckedFlag+"&"+"skuId="+skuId;
+        // $.post("checkCart",param,function (data) {
+        //     sumSumPrice();
+        // });
 
     }
 
@@ -316,7 +175,7 @@
     //购物车顶端tab
     $(".One_Topleft span:last-child").mouseover(function(){
         $(".One_Topleft span:first-child").css({"color":"black","border-bottom":"none"})
-        $(this).css({"cursor":"pointer","color":"#E4393C","border-bottom":"2px solid red"})
+        $(this).css({"cursor":"pointer","color":"#e42338","border-bottom":"2px solid red"})
     }).mouseout(function(){
         $(this).css({"color":"black","border-bottom":"none"});
         $(".One_Topleft span:first-child").css({"cursor":"pointer","color":"#E4393C","border-bottom":"2px solid red"})
@@ -700,15 +559,6 @@
         $(this).parent().parent().slideUp(100)
     })
 
-
-
-
-
-
-
-
-
-
     //active
     $(".one_main_div1 .one_main_ul>li").mouseover(function(){
         $(".one_main_div1 .one_main_ul>li").removeClass("active");
@@ -735,7 +585,6 @@
             if (index > $('.fade li').length - 1) {
                 index = 0;
             }
-
         });
 
         //点击左边按钮

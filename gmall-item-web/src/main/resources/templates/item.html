@@ -1053,22 +1053,18 @@
             var saleAttrValueId = $(div).attr("value");
             key = key + "|" + saleAttrValueId;
         })
-        alert(key);
         //匹配hash表
         var hashStr = $("#valuesSkuJson").val();
-        alert(hashStr);
         var hashJson = JSON.parse(hashStr);
 
         var v = hashJson[key];
         var skuId = $("#skuId").val();
         if (v && v != skuId) {
             //跳转新的sku
-            alert("跳转新的sku");
             window.location.href = "/" + v + ".html";
         } else {
             //NULL!
         }
-        alert(v);
         // var checkDivs = $(".redborder div");
         // var valueIds = "";
         // // 拼接成属性值串

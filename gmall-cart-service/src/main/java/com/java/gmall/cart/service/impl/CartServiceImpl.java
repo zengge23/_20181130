@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import redis.clients.jedis.Jedis;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,12 +52,36 @@ public class CartServiceImpl implements CartService {
         List<CartInfo> cartInfos = cartInfoMapper.select(cartInfo);
 
         jedis.del("user:" + userId + ":cart");
-        
+
         Map<String, String> map = new HashMap<>();
         for (CartInfo info : cartInfos) {
             map.put(info.getSkuId(),JSON.toJSONString(info));
         }
         jedis.hmset("user:" + userId + ":cart",map);
         jedis.close();
+    }
+
+    @Override
+    public List<CartInfo> getCartListFromCache(String userId) {
+        List<CartInfo> cartInfos = new ArrayList<>();
+        Jedis jedis = redisUtil.getJedis();
+        List<String> hvals = jedis.hvals("user:" + userId + ":cart");
+        if(hvals != null && hvals.size() > 0){
+            for(String hval : hvals){
+                CartInfo cartInfo = new CartInfo();
+                cartInfo = JSON.parseObject(hval,CartInfo.class);
+                cartInfos.add(cartInfo);
+            }
+        }
+        jedis.close();
+        return cartInfos;
+    }
+
+    @Override
+    public List<CartInfo> getCartListByUserId(String userId) {
+        CartInfo cartInfo = new CartInfo();
+        cartInfo.setUserId(userId);
+        List<CartInfo> cartInfos = cartInfoMapper.select(cartInfo);
+        return cartInfos;
     }
 }
