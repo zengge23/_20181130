@@ -2,6 +2,7 @@ package com.java.gmall.cart.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSON;
+import com.java.gmall.annotations.LoginRequire;
 import com.java.gmall.bean.CartInfo;
 import com.java.gmall.bean.SkuInfo;
 import com.java.gmall.service.CartService;
@@ -181,14 +182,15 @@ public class CartController {
         return "success";
     }
 
+    @LoginRequire(isNeededSuccess = true)
     @RequestMapping("toTrade")
     public String toTrade(){
         String userId = "";
-        if (StringUtils.isNotBlank(userId)){
-            return "success";
-        }else{
-            return "redirect:http://passport.gmall.com:8085/index";
-        }
+//        if (StringUtils.isNotBlank(userId)){
+            return "tradeTest";
+//        }else{
+//            return "redirect:http://passport.gmall.com:8085/index";
+//        }
 
     }
 }

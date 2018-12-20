@@ -132,23 +132,39 @@
        window.location.href="http://passport.atguigu.com/index?originUrl="+s;
     }
 
-    function checkSku(chkbox){
-       var skuId= $(chkbox).attr("value");
-       var checked=$(chkbox).prop("checked");
-       var isCheckedFlag="0";
-       if(checked){
-           isCheckedFlag="1";
-       }
+    // function checkSku(chkbox){
+    //    var skuId= $(chkbox).attr("value");
+    //    var checked=$(chkbox).prop("checked");
+    //    var isCheckedFlag="0";
+    //    if(checkeded){
+    //        isCheckedFlag="1";
+    //    }
+    //
+    //    $.post("checkCart",{skuId:skuId,isCheckedFlag:isCheckedFlag},function(data){
+    //        alert("1");
+    //         $("#cartListInner").html(data);
+    //    });
+    //     // var param="isChecked="+isCheckedFlag+"&"+"skuId="+skuId;
+    //     // $.post("checkCart",param,function (data) {
+    //     //     sumSumPrice();
+    //     // });
+    //
+    // }
 
-       $.post("checkCart",{skuId:skuId,isCheckedFlag:isCheckedFlag},function(data){
-            $("#cartListInner").html(data);
-       })
-        // var param="isChecked="+isCheckedFlag+"&"+"skuId="+skuId;
-        // $.post("checkCart",param,function (data) {
-        //     sumSumPrice();
-        // });
+     function checkSku( chkbox){
+         var skuId= $(chkbox).attr("value");
+         var checked=$(chkbox).prop("checked");
 
-    }
+         var isCheckedFlag="0";
+         if(checked){
+             isCheckedFlag="1";
+         }
+
+         $.post("checkCart",{skuId:skuId,isCheckedFlag:isCheckedFlag},function(data){
+             $("#cartListInner").html(data);
+         })
+
+     }
 
      //封装总价钱函数
      function sumSumPrice(){

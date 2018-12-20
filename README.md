@@ -16,4 +16,6 @@ gamll-list-web:8083
 gmall-cart-web:8084
 
 gmall-cart-service:8074
+***
+gmall-passport-web:8085
 
