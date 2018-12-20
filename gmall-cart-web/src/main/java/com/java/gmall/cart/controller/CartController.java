@@ -9,6 +9,7 @@ import com.java.gmall.service.CartService;
 import com.java.gmall.service.SkuService;
 import com.java.gmall.util.CookieUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,11 +30,13 @@ public class CartController {
     @Reference
     CartService cartService;
 
+    @LoginRequire(isNeededSuccess = false)
     @RequestMapping("checkCart")
     public String checkCart(HttpServletRequest request,HttpServletResponse response,String isCheckedFlag,String skuId,ModelMap map){
-        System.out.println("???");
+//        System.out.println("???");
         List<CartInfo> cartInfos = new ArrayList<>();
-        String userId="2";
+//        String userId="2";
+        String userId = (String)request.getAttribute("userId");
         if(StringUtils.isNotBlank(userId)){
             //改DB
             cartInfos = cartService.getCartListByUserId(userId);
@@ -66,10 +69,12 @@ public class CartController {
         return "cartListInner";
     }
 
+    @LoginRequire(isNeededSuccess = false)
     @RequestMapping("cartList")
     public String cartList(HttpServletRequest request, ModelMap map){
         //判断用户是否登录
-        String userId = "2";
+//        String userId = "2";
+        String userId = (String)request.getAttribute("userId");
         List<CartInfo> cartInfos = new ArrayList<>();
         if (StringUtils.isBlank(userId)) {
             //从cookie中取数据
@@ -99,6 +104,7 @@ public class CartController {
         return sum;
     }
 
+    @LoginRequire(isNeededSuccess = false)
     @RequestMapping("addToCart")
     public String addToCart(HttpServletResponse response,HttpServletRequest request, String skuId, Integer num){
         //购物车添加逻辑
@@ -112,7 +118,8 @@ public class CartController {
         cartInfo.setSkuId(skuInfo.getId());
         cartInfo.setImgUrl(skuInfo.getSkuDefaultImg());
         //用户ID
-        String userId = "2";
+//        String userId = "2";
+        String userId = (String)request.getAttribute("userId");
         List<CartInfo> cartInfos = new ArrayList<>();
         if(StringUtils.isNotBlank(userId)){
             //用户已经登录
@@ -176,6 +183,7 @@ public class CartController {
         return b;
     }
 
+    @LoginRequire(isNeededSuccess = false)
     @RequestMapping("cartAddSuccess")
     public String cartAddSuccess(){
 
@@ -184,8 +192,9 @@ public class CartController {
 
     @LoginRequire(isNeededSuccess = true)
     @RequestMapping("toTrade")
-    public String toTrade(){
-        String userId = "";
+    public String toTrade(HttpServletRequest request){
+        String userId = (String)request.getAttribute("userId");
+//        String userId = "";
 //        if (StringUtils.isNotBlank(userId)){
             return "tradeTest";
 //        }else{

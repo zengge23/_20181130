@@ -4,7 +4,6 @@ import com.java.gmall.annotations.LoginRequire;
 import com.java.gmall.util.CookieUtil;
 import com.java.gmall.util.HttpClientUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.codehaus.groovy.util.StringUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -17,10 +16,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter{
 
         @Override
         public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-//            String newToken = request.getParameter("newToken");
-//            if (newToken != null && newToken.length() > 0) {
-//                CookieUtil.setCookie(request, response, "token", newToken, WebConst.cookieExpire, false);
-//            }
+
             //判断当前请求方法的拦截类型
             HandlerMethod handler1 = (HandlerMethod) handler;
             LoginRequire methodAnnotation = handler1.getMethodAnnotation(LoginRequire.class);
@@ -44,13 +40,14 @@ public class AuthInterceptor extends HandlerInterceptorAdapter{
                 token = newToken;
             }
 
-            if(neededSuccess == true && StringUtils.isNotBlank(token)){
-                response.sendRedirect( "redirect:http://passport.gmall.com:8085/index");
+            if(neededSuccess == true && StringUtils.isBlank(token)){
+                String returnUrl = request.getRequestURL().toString();
+                response.sendRedirect( "http://passport.gmall.com:8085/index?returnUrl=" + returnUrl);
                 return false;
             }
 
             //验证token, http的工具
-            String doGet = HttpClientUtil.doGet("http://passport.gmall.com:8085/verify");
+            String doGet = HttpClientUtil.doGet("http://passport.gmall.com:8085/verify?token=" + token);
 
             return true;
         }

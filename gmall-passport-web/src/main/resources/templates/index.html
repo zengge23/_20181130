@@ -43,20 +43,20 @@
 						<li class="top_1">
 							<img src="/img/user_03.png" class="err_img1"/>
 
-							<input type="text" name="loginName" placeholder=" 邮箱/用户名/已验证手机"  class="user"/>
+							<input type="text" name="loginName" id="loginName" placeholder=" 邮箱/用户名/已验证手机"  class="user"/>
 						</li>
 						<li>
 							<img src="/img/user_06.png" class="err_img2"/>
-							<input type="password" name="passwd" placeholder=" 密码" class="password"/>
+							<input type="password" name="passwd" id="passwd" placeholder=" 密码" class="password"/>
 
 						</li>
 						<li class="bri">
 							<a href="">忘记密码</a>
 						</li>
-						<li class="ent"><button id="btn2" type="button" class="btn2"><a href="javascript:submitLogin();" class="a">登 &nbsp; &nbsp;录</a></button></li>
+						<li class="ent"><button id="btn2" type="button" class="btn2" th:onclick="'javascript:submitLogin();'"><a href="javascript:submitLogin();" class="a">登 &nbsp; &nbsp;录</a></button></li>
 
 					</ul>
-						<input type="hidden" id="originUrl" name="originUrl" th:value="${originUrl}"/>
+						<input type="hidden" id="returnUrl" name="returnUrl" th:value="${returnUrl}"/>
 					</form>
 				</div>
 			<div class="si_out">
@@ -75,6 +75,17 @@
 		
 	</body>
 	<script language="JavaScript">
+
+		function submitLogin(){
+		    var loginName = $("#loginName").val();
+		    var passwd = $("#passwd").val();
+
+		    $.post("login",{password:passwd,loginName:loginName},function(data){
+		        var returnUrl = $("#returnUrl").val();
+				alert(data + returnUrl);
+				window.location.href = returnUrl + "?newToken=" + data;
+			});
+		}
 
 			
 			var btn2=document.getElementsByClassName('btn2')[0];
