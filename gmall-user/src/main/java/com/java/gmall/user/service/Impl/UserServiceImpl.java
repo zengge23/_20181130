@@ -19,6 +19,16 @@ public class UserServiceImpl implements UserService {
         List<UserInfo> userInfolist = userInfoMapper.selectUserAndAddress();
         return userInfolist;
     }
+
+    @Override
+    public UserInfo login(UserInfo userInfo) {
+        UserInfo userInfo1 = userInfoMapper.selectOne(userInfo);
+        if(userInfo1 != null){
+            //用户数据放入redis
+        }
+        System.out.println(userInfo1+"1111111");
+        return userInfo1;
+    }
 //
 //    @Override
 //    public List<UserInfo> userList(){

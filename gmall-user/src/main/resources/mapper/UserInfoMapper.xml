@@ -8,22 +8,10 @@
   </select>
     <resultMap id="selectUserAndAddressMap" type="com.java.gmall.bean.UserInfo" autoMapping="true">
         <id column="user_id" property="id"></id>
-        <!--<result column="login_name" property="loginName"></result>-->
-        <!--<result column="nick_name" property="nickName"></result>-->
-        <!--<result column="password" property="password"></result>-->
-        <!--<result column="name" property="name"></result>-->
-        <!--<result column="phone_num" property="phoneNum"></result>-->
-        <!--<result column="email" property="email"></result>-->
-        <!--<result column="headImg" property="head_img"></result>-->
-        <!--<result column="userLevel" property="user_level"></result>-->
+
         <collection property="userAddresses" ofType="com.java.gmall.bean.UserAddress" autoMapping="true">
-            <!--<id column="address_id" property="id"></id>-->
             <result column="address_id" property="id"></result>
-            <!--<result column="user_address" property="userAddress"></result>-->
-            <!--<result column="user_id" property="userId"></result>-->
-            <!--<result column="consignee" property="consignee"></result>-->
-            <!--<result column="phone_num" property="phoneNum"></result>-->
-            <!--<result column="is_default" property="isDefault"></result>-->
+
         </collection>
 
     </resultMap>

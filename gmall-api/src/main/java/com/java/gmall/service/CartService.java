@@ -16,4 +16,6 @@ public interface CartService {
     List<CartInfo> getCartListFromCache(String userId);
 
     List<CartInfo> getCartListByUserId(String userId);
+
+    void mergCart(List<CartInfo> cartInfos, String id);
 }

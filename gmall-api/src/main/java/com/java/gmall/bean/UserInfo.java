@@ -8,13 +8,13 @@ import java.util.List;
 public class UserInfo implements Serializable {
 
 //    @Id
-    private Integer id;
+    private String id;
 //    @Column(name="login_name")
     private String loginName;
 //    @Column(name="nick_name")
     private String nickName;
 //    @Column(name="password")
-    private Integer password;
+    private Integer passwd;
 //    @Column(name="name")
     private String name;
 //    @Column(name="phone_num")
@@ -36,11 +36,11 @@ public class UserInfo implements Serializable {
         this.userAddresses = userAddresses;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -60,12 +60,12 @@ public class UserInfo implements Serializable {
         this.nickName = nickName;
     }
 
-    public Integer getPassword() {
-        return password;
+    public Integer getPasswd() {
+        return passwd;
     }
 
-    public void setPassword(Integer password) {
-        this.password = password;
+    public void setPasswd(Integer passwd) {
+        this.passwd = passwd;
     }
 
     public String getName() {

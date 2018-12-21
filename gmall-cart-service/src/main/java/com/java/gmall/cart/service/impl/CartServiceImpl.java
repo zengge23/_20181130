@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import redis.clients.jedis.Jedis;
 import tk.mybatis.mapper.entity.Example;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -83,5 +84,43 @@ public class CartServiceImpl implements CartService {
         cartInfo.setUserId(userId);
         List<CartInfo> cartInfos = cartInfoMapper.select(cartInfo);
         return cartInfos;
+    }
+
+    @Override
+    public void mergCart(List<CartInfo> cartListCookie, String userId) {
+        CartInfo cartInfo = new CartInfo();
+        cartInfo.setUserId(userId);
+        List<CartInfo> cartListDB = cartInfoMapper.select(cartInfo);
+        for(CartInfo cartInfoCookie : cartListCookie){
+            boolean b = if_new_cart(cartListCookie,cartInfoCookie);
+            if(b){
+                //在db中新增购物车
+                cartInfoCookie.setUserId(userId);
+                cartInfoMapper.insertSelective(cartInfoCookie);
+            }else{
+                //更新db
+                for(CartInfo cartInfoDB : cartListDB){
+                    if(cartInfoDB.getSkuId().equals(cartInfoCookie.getSkuId())){
+                        cartInfoDB.setSkuNum(cartInfoDB.getSkuNum() + cartInfoCookie.getSkuNum());
+                        cartInfoDB.setCartPrice(cartInfoDB.getSkuPrice().multiply(new BigDecimal(cartInfoDB.getSkuNum())));
+                        cartInfoMapper.updateByPrimaryKeySelective(cartInfoDB);
+
+
+                    }
+                }
+            }
+        }
+        flushCache(userId);
+    }
+
+    private boolean if_new_cart(List<CartInfo> cartInfos, CartInfo cartInfo) {
+        boolean b = true;
+
+        for(CartInfo info : cartInfos){
+            if(cartInfo.getSkuId().equals(info.getSkuId())){
+                b = false;
+            }
+        }
+        return b;
     }
 }
