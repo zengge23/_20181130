@@ -190,16 +190,16 @@ public class CartController {
         return "success";
     }
 
-    @LoginRequire(isNeededSuccess = true)
-    @RequestMapping("toTrade")
-    public String toTrade(HttpServletRequest request){
-        String userId = (String)request.getAttribute("userId");
-//        String userId = "";
-//        if (StringUtils.isNotBlank(userId)){
-            return "tradeTest";
-//        }else{
-//            return "redirect:http://passport.gmall.com:8085/index";
-//        }
-
-    }
+//    @LoginRequire(isNeededSuccess = true)
+//    @RequestMapping("toTrade")
+//    public String toTrade(HttpServletRequest request){
+//        String userId = (String)request.getAttribute("userId");
+////        String userId = "";
+////        if (StringUtils.isNotBlank(userId)){
+//            return "tradeTest";
+////        }else{
+////            return "redirect:http://passport.gmall.com:8085/index";
+////        }
+//
+//    }
 }

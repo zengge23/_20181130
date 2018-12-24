@@ -18,4 +18,9 @@ gmall-cart-web:8084
 gmall-cart-service:8074
 ***
 gmall-passport-web:8085
+***
+
+gmall-order-web:8086
+
+gmall-order-service:8076
 

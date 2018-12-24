@@ -8,11 +8,11 @@ public class UserAddress implements Serializable {
 //
 //    @Column
 //    @Id
-    private Integer id;
+    private String id;
 //    @Column(name="user_address")
     private String  userAddress;
 //    @Column(name="user_id")
-    private Integer userId;
+    private String userId;
 //    @Column(name="consignee")
     private String consignee;
 //    @Column(name="phone_num")
@@ -20,11 +20,11 @@ public class UserAddress implements Serializable {
 //    @Column(name="is_default")
     private String isDefault;
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -36,11 +36,11 @@ public class UserAddress implements Serializable {
         this.userAddress = userAddress;
     }
 
-    public Integer getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
