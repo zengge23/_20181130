@@ -58,7 +58,9 @@ public class CartServiceImpl implements CartService {
         for (CartInfo info : cartInfos) {
             map.put(info.getSkuId(),JSON.toJSONString(info));
         }
-        jedis.hmset("user:" + userId + ":cart",map);
+        if(map.size() != 0){
+            jedis.hmset("user:" + userId + ":cart",map);
+        }
         jedis.close();
     }
 

@@ -68,13 +68,26 @@ public class OrderServiceImpl implements OrderService {
             orderDetailMapper.insertSelective(orderDetail);
         }
 
-        //删除购物车数据
-
     }
 
     @Override
     public void deleteCheckedCart(List<String> delList) {
         String delStr = StringUtils.join(delList,",");
         orderInfoMapper.deleteCheckedCart(delStr);
+    }
+
+    @Override
+    public OrderInfo getOrderByOutTradeNo(String outTradeNo) {
+        OrderInfo orderInfo = new OrderInfo();
+        orderInfo.setOutTradeNo(outTradeNo);
+        OrderInfo orderInfo1 = orderInfoMapper.selectOne(orderInfo);
+
+        OrderDetail orderDetail = new OrderDetail();
+        orderDetail.setOrderId(orderInfo1.getId());
+        List<OrderDetail> orderDetails = orderDetailMapper.select(orderDetail);
+
+        orderInfo1.setOrderDetailList(orderDetails);
+
+        return orderInfo1;
     }
 }

@@ -17,4 +17,6 @@ public interface OrderService {
     void saveOrder(OrderInfo orderInfo);
 
     void deleteCheckedCart(List<String> delList);
+
+    OrderInfo getOrderByOutTradeNo(String outTradeNo);
 }

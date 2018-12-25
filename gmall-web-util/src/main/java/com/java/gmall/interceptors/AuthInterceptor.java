@@ -60,7 +60,6 @@ public class AuthInterceptor extends HandlerInterceptorAdapter{
                         ip = "127.0.0.1";
                     }
                 }
-//                String doGet = HttpClientUtil.doGet("http://passport.gmall.com:8085/verify?token="+ token + "&currentIp=" + ip);
                 String doGet = HttpClientUtil.doGet("http://passport.gmall.com:8085/verify?token="+token+"&currentIp="+ip);
                 if(doGet.equals("success")){
                     //刷新用户cookie中的token

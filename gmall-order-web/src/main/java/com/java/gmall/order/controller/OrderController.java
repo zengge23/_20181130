@@ -84,16 +84,16 @@ public class OrderController {
             orderService.saveOrder(orderInfoForDB);
 
             //删除购物车数据
-            orderService.deleteCheckedCart(delList);
+//            orderService.deleteCheckedCart(delList);
 
             //刷新购物车缓存
             cartService.flushCache(userId);
 
             //重定向到支付页面
+            return "redirect:http://payment.gmall.com:8090/index?outTradeNo=" + orderInfoForDB.getOutTradeNo() + "&totalAmount=" + getCartSum(cartInfos);
         }else{
             return "tradeFail";
         }
-        return "paytest";
     }
 
     @LoginRequire(isNeededSuccess = true)
