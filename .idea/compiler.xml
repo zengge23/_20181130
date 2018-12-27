@@ -26,9 +26,5 @@
         <module name="gmall-web-util" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="sdf" target="1.5" />
-      <module name="sfdsdsdf" target="1.5" />
-    </bytecodeTargetLevel>
   </component>
 </project>
