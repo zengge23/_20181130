@@ -105,6 +105,7 @@ public class PaymentController {
             try {
                 Map<String, String> testMap = new HashMap<>();
                 boolean signVerified = AlipaySignature.rsaCheckV1(testMap, AlipayConfig.alipay_public_key, AlipayConfig.charset, AlipayConfig.sign_type);
+//                boolean signVerified = AlipaySignature.rsaCheckV1(null, AlipayConfig.alipay_public_key, AlipayConfig.charset, AlipayConfig.sign_type);
             } catch (AlipayApiException e) {
                 e.printStackTrace();
             }
@@ -118,9 +119,10 @@ public class PaymentController {
             paymentInfo.setOutTradeNo(out_trade_no);
 
             paymentService.updatePayment(paymentInfo);
-        }
 
-        //通知订单系统,修改订单状态
+            //通知订单系统,修改订单状态
+            paymentService.sendPaymentSuccessQueue(paymentInfo);
+        }
         return "finish";
     }
 }

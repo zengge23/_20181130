@@ -8,4 +8,6 @@ public interface PaymentService {
     void savePayment(PaymentInfo paymentInfo);
 
     boolean checkPayStatus(String out_trade_no);
+
+    void sendPaymentSuccessQueue(PaymentInfo paymentInfo);
 }
