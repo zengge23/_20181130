@@ -1,18 +1,25 @@
 package com.java.gmall.order.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSON;
 import com.java.gmall.bean.CartInfo;
 import com.java.gmall.bean.OrderDetail;
 import com.java.gmall.bean.OrderInfo;
 import com.java.gmall.order.mapper.OrderDetailMapper;
 import com.java.gmall.order.mapper.OrderInfoMapper;
 import com.java.gmall.service.OrderService;
+import com.java.gmall.util.ActiveMQUtil;
 import com.java.gmall.util.RedisUtil;
+import org.apache.activemq.command.ActiveMQMapMessage;
+import org.apache.activemq.command.ActiveMQTextMessage;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import redis.clients.jedis.Jedis;
+import tk.mybatis.mapper.entity.Example;
 
+import javax.jms.*;
+import javax.xml.soap.Text;
 import java.util.List;
 
 @Service
@@ -26,6 +33,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     OrderDetailMapper orderDetailMapper;
+
+    @Autowired
+    ActiveMQUtil activeMQUtil;
 
     @Override
     public List<OrderDetail> getOrderDetailList(List<CartInfo> cartListByUserId) {
@@ -89,5 +99,47 @@ public class OrderServiceImpl implements OrderService {
         orderInfo1.setOrderDetailList(orderDetails);
 
         return orderInfo1;
+    }
+
+    @Override
+    public void updateProcessStatus(String out_trade_no, String result, String trade_no) {
+        //更新订单的状态,流程状态,支付宝流水号
+        Example example = new Example(OrderInfo.class);
+        example.createCriteria().andEqualTo("outTradeNo",out_trade_no);
+
+        OrderInfo orderInfo = new OrderInfo();
+        orderInfo.setOrderStatus("订单已支付");
+        orderInfo.setProcessStatus("订单已支付");
+        orderInfo.setTrackingNo(trade_no);
+        orderInfoMapper.updateByExampleSelective(orderInfo,example);
+    }
+
+    @Override
+    public void sendOrderResult(String out_trade_no) {
+        //发送订单结果的消息通知给系统
+        //发送订单支付成功的消息队列
+
+        //建立mq工厂
+        try {
+            Connection connection = activeMQUtil.getConnection();
+            connection.start();
+            //第一个值表示是否使用事务，如果选择true，第二个值相当于选择0
+            Session session = connection.createSession(true, Session.SESSION_TRANSACTED);
+            Queue testqueue = session.createQueue("ORDER_SUCCESS_QUEUE");
+
+            MessageProducer producer = session.createProducer(testqueue);
+            TextMessage textMessage = new ActiveMQTextMessage();
+            OrderInfo order = getOrderByOutTradeNo(out_trade_no);
+            textMessage.setText(JSON.toJSONString(order));
+
+            producer.setDeliveryMode(DeliveryMode.PERSISTENT);
+            producer.send(textMessage);
+
+            session.commit();
+            connection.close();
+
+        }catch (JMSException e){
+            e.printStackTrace();
+        }
     }
 }

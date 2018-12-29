@@ -69,6 +69,12 @@ public class OrderController {
             List<OrderDetail> orderDetails = new ArrayList<>();
             for(CartInfo cartInfo : cartInfos){
                 if(cartInfo.getIsChecked().equals("1")){
+
+                    //验价
+
+                    //验库存,远程通过ws调用库存接口
+
+
                     OrderDetail orderDetail = new OrderDetail();
                     orderDetail.setSkuName(cartInfo.getSkuName());
                     orderDetail.setImgUrl(cartInfo.getImgUrl());

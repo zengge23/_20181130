@@ -1,17 +1,24 @@
 package com.java.gmall.payment.service;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSON;
+import com.alipay.api.AlipayApiException;
+import com.alipay.api.AlipayClient;
+import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.request.AlipayTradeQueryRequest;
+import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.java.gmall.bean.PaymentInfo;
+import com.java.gmall.payment.conf.AlipayConfig;
 import com.java.gmall.payment.mapper.PaymentInfoMapper;
 import com.java.gmall.util.ActiveMQUtil;
-import org.apache.activemq.ActiveMQConnection;
-import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.activemq.ScheduledMessage;
 import org.apache.activemq.command.ActiveMQMapMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.jms.*;
-import javax.management.JMException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class PaymentServiceImpl implements PaymentService{
@@ -21,6 +28,9 @@ public class PaymentServiceImpl implements PaymentService{
 
     @Autowired
     ActiveMQUtil activeMQUtil;
+
+    @Autowired
+    AlipayClient alipayClient;
 
     @Override
     public void updatePayment(PaymentInfo paymentInfo) {
@@ -34,6 +44,7 @@ public class PaymentServiceImpl implements PaymentService{
         paymentInfoMapper.insertSelective(paymentInfo);
     }
 
+    //提交支付的幂等性检查
     @Override
     public boolean checkPayStatus(String out_trade_no) {
         boolean b = true;
@@ -57,13 +68,14 @@ public class PaymentServiceImpl implements PaymentService{
             Connection connection = activeMQUtil.getConnection();
             connection.start();
             //第一个值表示是否使用事务，如果选择true，第二个值相当于选择0
-            Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            Destination testqueue = session.createQueue("PAYMENT_SUCCESS_QUEUE");
+            Session session = connection.createSession(true, Session.SESSION_TRANSACTED);
+            Queue testqueue = session.createQueue("PAYMENT_SUCCESS_QUEUE");
 
             MessageProducer producer = session.createProducer(testqueue);
             MapMessage mapMessage = new ActiveMQMapMessage();
             mapMessage.setString("out_trade_no",paymentInfo.getOutTradeNo());
             mapMessage.setString("trade_no",paymentInfo.getAlipayTradeNo());
+            mapMessage.setString("result",paymentInfo.getPaymentStatus());
 
             producer.setDeliveryMode(DeliveryMode.PERSISTENT);
             producer.send(mapMessage);
@@ -74,5 +86,76 @@ public class PaymentServiceImpl implements PaymentService{
         }catch (JMSException e){
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void sendDelayPaymentResult(PaymentInfo paymentInfo, int count) {
+        //发送延迟支付的消息队列
+
+        //建立mq工厂
+        try {
+            Connection connection = activeMQUtil.getConnection();
+            connection.start();
+            //第一个值表示是否使用事务，如果选择true，第二个值相当于选择0
+            Session session = connection.createSession(true, Session.SESSION_TRANSACTED);
+            Queue testqueue = session.createQueue("PAYMENT_CHECK_QUEUE");
+
+            MessageProducer producer = session.createProducer(testqueue);
+            MapMessage mapMessage = new ActiveMQMapMessage();
+            mapMessage.setString("out_trade_no",paymentInfo.getOutTradeNo());
+//            mapMessage.setString("trade_no",paymentInfo.getAlipayTradeNo());
+//            mapMessage.setString("result",paymentInfo.getPaymentStatus());
+            mapMessage.setInt("count",count);
+            mapMessage.setLongProperty(ScheduledMessage.AMQ_SCHEDULED_DELAY,1000*10);
+            producer.setDeliveryMode(DeliveryMode.PERSISTENT);
+            producer.send(mapMessage);
+
+            session.commit();
+            connection.close();
+
+        }catch (JMSException e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public Map<String, String> checkAlipayPayment(String out_trade_no) {
+        Map<String, String> returnMap = new HashMap<>();
+        System.out.println("调用检查支付状态接口");
+//        AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do","app_id","your private_key","json","GBK","alipay_public_key","RSA2");
+        AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();
+
+        Map<String, String> requestMap = new HashMap<>();
+        requestMap.put("out_trade_no",out_trade_no);
+        request.setBizContent(JSON.toJSONString(requestMap));
+
+        AlipayTradeQueryResponse response = null;
+        try {
+            response = alipayClient.execute(request);
+        } catch (AlipayApiException e) {
+            e.printStackTrace();
+        }
+
+        if(response.isSuccess()){
+            System.out.println("调用成功");
+            String tradeStatus = response.getTradeStatus();
+            String tradeNo = response.getTradeNo();
+            String queryString = response.toString();
+
+            returnMap.put("trade_status",tradeStatus);
+            returnMap.put("trade_no",tradeNo);
+            returnMap.put("queryString",queryString);
+        } else {
+            System.out.println("调用失败");
+        }
+        return returnMap;
+    }
+
+    @Override
+    public PaymentInfo getPaymentByOrderOutTradeNo(String out_trade_no) {
+        PaymentInfo paymentInfo = new PaymentInfo();
+        paymentInfo.setOutTradeNo(out_trade_no);
+        PaymentInfo paymentInfo1 = paymentInfoMapper.selectOne(paymentInfo);
+        return paymentInfo1;
     }
 }

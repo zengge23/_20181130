@@ -24,6 +24,7 @@
         <module name="gmall-user" />
         <module name="gmall-user-web" />
         <module name="gmall-web-util" />
+        <module name="gware-manage" />
       </profile>
     </annotationProcessing>
   </component>

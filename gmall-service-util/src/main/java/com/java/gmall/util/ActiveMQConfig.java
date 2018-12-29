@@ -36,9 +36,6 @@ public class ActiveMQConfig {
     }
 
 
-
-
-
     @Bean(name = "jmsQueueListener")
     public DefaultJmsListenerContainerFactory jmsQueueListenerContainerFactory(ActiveMQConnectionFactory activeMQConnectionFactory) {
 
@@ -63,7 +60,7 @@ public class ActiveMQConfig {
     public ActiveMQConnectionFactory activeMQConnectionFactory ( ){
 
         ActiveMQConnectionFactory activeMQConnectionFactory =
-                new ActiveMQConnectionFactory(  brokerURL);
+                new ActiveMQConnectionFactory(brokerURL);
         return activeMQConnectionFactory;
     }
 

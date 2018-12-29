@@ -82,6 +82,10 @@ public class PaymentController {
             e.printStackTrace();
         }
         System.out.println(form);
+
+        //启动延迟检查支付状态的队列
+        paymentService.sendDelayPaymentResult(paymentInfo,5);
+
         return form;
 //        return ResponseEntity.ok().body(form);
     }
